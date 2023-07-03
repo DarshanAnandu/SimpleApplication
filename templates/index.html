@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom Styles */
+        body {
+            background-color: #f2f5f9;
+        }
+
+        .card {
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Student Data</h1>
+
+        <form method="POST" action="/" class="mt-4">
+            <div class="flex flex-col mb-4">
+                <label for="name" class="mb-2">Name</label>
+                <input type="text" name="name" id="name" required class="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <div class="flex flex-col mb-4">
+                <label for="college" class="mb-2">College</label>
+                <input type="text" name="college" id="college" required class="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+            </div>
+
+            <input type="submit" value="Submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+        </form>
+
+        <h2 class="text-2xl font-bold mt-8">Submitted Data:</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+            {% for student in students %}
+                <div class="card bg-white shadow-md rounded-md p-4">
+                    <h3 class="text-lg font-bold">{{ student.name }}</h3>
+                    <p class="text-gray-500">{{ student.college }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="modal" class="hidden">
+        <div class="modal">
+            <div class="modal-content">
+                <h3 class="text-lg font-bold" id="modal-name"></h3>
+                <p class="text-gray-500" id="modal-college"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                showModal(card);
+            });
+        });
+
+        const modal = document.getElementById('modal');
+        const modalName = document.getElementById('modal-name');
+        const modalCollege = document.getElementById('modal-college');
+
+        function showModal(card) {
+            const name = card.querySelector('h3').innerText;
+            const college = card.querySelector('p').innerText;
+
+            modalName.innerText = name;
+            modalCollege.innerText = college;
+            modal.classList.remove('hidden');
+
+            modal.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
